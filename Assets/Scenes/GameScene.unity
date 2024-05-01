@@ -220,6 +220,7 @@ MonoBehaviour:
   ball: {fileID: 3580233316690320750}
   bottomPaddle: {fileID: 8153576953986138446}
   topPaddle: {fileID: 1534081183}
+  arenaExtents: {x: 10, y: 10}
 --- !u!4 &456632202
 Transform:
   m_ObjectHideFlags: 0
@@ -1028,6 +1029,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4967531820599263498, guid: cc2a8bedc17b1534e80bd9aa21b0e61b, type: 3}
+      propertyPath: isAI
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4967531820599263498, guid: cc2a8bedc17b1534e80bd9aa21b0e61b, type: 3}
+      propertyPath: speed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2674947837993403045, guid: cc2a8bedc17b1534e80bd9aa21b0e61b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
