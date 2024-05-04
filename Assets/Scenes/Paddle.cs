@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Paddle : MonoBehaviour
@@ -12,6 +13,11 @@ public class Paddle : MonoBehaviour
     [SerializeField]
     bool isAI;
 
+    [SerializeField]
+    TextMeshPro scoreText;
+
+    int score;
+
     public void Move(float target, float arenaExtents)
     {
         Vector3 p = transform.localPosition;
@@ -19,6 +25,31 @@ public class Paddle : MonoBehaviour
         float limit = arenaExtents - extents;
         p.x = Mathf.Clamp(p.x, -limit, limit);
         transform.localPosition = p;
+    }
+
+    public bool HitBall(float ballX, float ballExtents, out float hitFactor)
+    {
+        hitFactor =
+            (ballX - transform.localPosition.x) /
+            (extents + ballExtents);
+        return -1f <= hitFactor && hitFactor <= 1f;
+    }
+
+    public void StartNewGame()
+    {
+        SetScore(0);
+    }
+
+    public bool ScorePoint(int pointsToWin)
+    {
+        SetScore(score + 1);
+        return score >= pointsToWin;
+    }
+
+    void SetScore(int newScore)
+    {
+        score = newScore;
+        scoreText.SetText("{0}", newScore);
     }
 
     float AdjustByAI(float x, float target)
