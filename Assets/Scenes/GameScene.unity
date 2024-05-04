@@ -218,9 +218,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ball: {fileID: 3580233316690320750}
-  bottomPaddle: {fileID: 8153576953986138446}
-  topPaddle: {fileID: 1534081183}
+  bottomPaddle: {fileID: 1534081183}
+  topPaddle: {fileID: 8153576953986138446}
   arenaExtents: {x: 10, y: 10}
+  pointsToWin: 3
 --- !u!4 &456632202
 Transform:
   m_ObjectHideFlags: 0
