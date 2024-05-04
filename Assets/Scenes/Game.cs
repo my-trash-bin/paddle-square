@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -16,7 +17,18 @@ public class Game : MonoBehaviour
     [SerializeField, Min(2)]
     int pointsToWin = 3;
 
-    void Awake() => StartNewGame();
+    [SerializeField]
+    TextMeshPro countdownText;
+
+    [SerializeField, Min(1f)]
+    float newGameDelay = 3f;
+
+    [SerializeField]
+    LivelyCamera livelyCamera;
+
+    float countdownUntilNewGame;
+
+    void Awake() => countdownUntilNewGame = newGameDelay;
 
     void StartNewGame()
     {
@@ -29,10 +41,41 @@ public class Game : MonoBehaviour
     {
         bottomPaddle.Move(ball.Position.x, arenaExtents.x);
         topPaddle.Move(ball.Position.x, arenaExtents.x);
+
+        if (countdownUntilNewGame <= 0f)
+        {
+            UpdateGame();
+        }
+        else
+        {
+            UpdateCountdown();
+        }
+    }
+
+    void UpdateGame()
+    {
         ball.Move();
         BounceYIfNeeded();
         BounceXIfNeeded(ball.Position.x);
         ball.UpdateVisualization();
+    }
+
+    void UpdateCountdown()
+    {
+        countdownUntilNewGame -= Time.deltaTime;
+        if (countdownUntilNewGame <= 0f)
+        {
+            countdownText.gameObject.SetActive(false);
+            StartNewGame();
+        }
+        else
+        {
+            float displayValue = Mathf.Ceil(countdownUntilNewGame);
+            if (displayValue < newGameDelay)
+            {
+                countdownText.SetText("{0}", displayValue);
+            }
+        }
     }
 
     void BounceYIfNeeded()
@@ -55,15 +98,20 @@ public class Game : MonoBehaviour
 
         BounceXIfNeeded(bounceX);
         bounceX = ball.Position.x - ball.Velocity.x * durationAfterBounce;
+        livelyCamera.PushXZ(ball.Velocity);
         ball.BounceY(boundary);
 
         if (defender.HitBall(bounceX, ball.Extents, out float hitFactor))
         {
             ball.SetXPositionAndSpeed(bounceX, hitFactor, durationAfterBounce);
         }
-        else if (attacker.ScorePoint(pointsToWin))
+        else
         {
-            StartNewGame();
+            livelyCamera.JostleY();
+            if (attacker.ScorePoint(pointsToWin))
+            {
+                StartNewGame();
+            }
         }
     }
 
@@ -72,10 +120,12 @@ public class Game : MonoBehaviour
         float xExtents = arenaExtents.x - ball.Extents;
         if (x < -xExtents)
         {
+            livelyCamera.PushXZ(ball.Velocity);
             ball.BounceX(-xExtents);
         }
         else if (x > xExtents)
         {
+            livelyCamera.PushXZ(ball.Velocity);
             ball.BounceX(xExtents);
         }
     }
