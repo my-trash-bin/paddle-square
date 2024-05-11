@@ -110,9 +110,17 @@ public class Game : MonoBehaviour
             livelyCamera.JostleY();
             if (attacker.ScorePoint(pointsToWin))
             {
-                StartNewGame();
+                EndGame();
             }
         }
+    }
+
+    void EndGame()
+    {
+        countdownUntilNewGame = newGameDelay;
+        countdownText.SetText("GAME OVER");
+        countdownText.gameObject.SetActive(true);
+        ball.EndGame();
     }
 
     void BounceXIfNeeded(float x)
