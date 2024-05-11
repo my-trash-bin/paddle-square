@@ -12,10 +12,10 @@ public class Ball : MonoBehaviour
         extents = 0.5f;
 
     [SerializeField]
-    ParticleSystem bounceParticleSystem;
+    ParticleSystem bounceParticleSystem, startParticleSystem, trailParticleSystem;
 
     [SerializeField]
-    int bounceParticleEmission = 20;
+    int bounceParticleEmission = 20, startParticleEmission = 100;
 
     public float Extents => extents;
 
@@ -25,8 +25,8 @@ public class Ball : MonoBehaviour
 
     public Vector2 Velocity => velocity;
 
-    public void UpdateVisualization() =>
-    transform.localPosition = new Vector3(position.x, 0f, position.y);
+    public void UpdateVisualization() => trailParticleSystem.transform.localPosition =
+        transform.localPosition = new Vector3(position.x, 0f, position.y);
 
     public void Move() => position += velocity * Time.deltaTime;
 
@@ -39,6 +39,8 @@ public class Ball : MonoBehaviour
         velocity.x = Random.Range(-maxStartXSpeed, maxStartXSpeed);
         velocity.y = -constantYSpeed;
         gameObject.SetActive(true);
+        startParticleSystem.Emit(startParticleEmission);
+        trailParticleSystem.Play();
     }
 
     public void EndGame()
